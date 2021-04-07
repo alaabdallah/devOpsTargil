@@ -1,26 +1,16 @@
-FROM node
+# Base Image 
+FROM        node
 
-RUN \
-    mkdir -p /application
+# exposed port - same port is defined in the server.js
+EXPOSE      3030
 
-COPY package*.json /application/
+# The "configuration" which we pass in runtime
+ENV         LANGUAGE    Hebrew
+ENV         TOKEN       Hard-To-Guess
 
-ENV APP_NAME=$APP_NAME
-ENV APP_PORT=$APP_PORT
-ENV TEST=test
+# Copy the server to the container
+COPY        server.js .
 
-WORKDIR /application/
-
-RUN \
-    npm install
-
-COPY . .
-
-ARG BUILD_NUMBER
-RUN \
-    sed -i "s#_RUN_VERSION__#${BUILD_NUMBER}#g" server.config.js && \
-    npm run build
-
-EXPOSE 3030
-
+# start the server
+ENTRYPOINT  node server.js
 CMD ["npm", "run", "prod"]
