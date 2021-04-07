@@ -7,4 +7,4 @@ replicas:
     count: 10
 
 resources:
-  - deployment.yaml
+  - configMapGenerator.yaml
